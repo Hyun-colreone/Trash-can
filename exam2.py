@@ -1,7 +1,7 @@
 from collections import Counter
 from matplotlib import pyplot as plt
 import math
-from linear_algebra import sum_of
+import numpy as np
 
 num_friends = [100,49,41,40,25,21,21,19,19,18,18,16,15,15,15,15,14,14,13,13,13,13,12,12,11,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,8,8,8,8,8,8,8,8,8,8,8,8,8,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
@@ -9,7 +9,14 @@ daily_minutes = [1,68.77,51.25,52.08,38.36,44.54,57.13,51.4,41.42,31.22,34.76,54
 def mean(x):
     return sum(x) / len(x)
 
-mean(num_friends)
+def variance(x):
+    """assumes x has at least two elements"""
+    n = len(x)
+    deviations = de_mean(x)
+    return np.sum_of_squares(deviations) / (n - 1)
+
+def standard_deviation(x):
+    return math.sqrt(variance(x))
 
 def de_mean(x):
     """translate x by subtracting its mean (so the result has mean 0)"""
@@ -18,4 +25,14 @@ def de_mean(x):
 
 def covariance(x,y):
     n=len(x)
-    return dot(de_mean(x),de_mean(y)) / (n-1)
+    return np.dot(de_mean(x),de_mean(y)) / (n-1)
+
+def correlation(x,y):
+    stdev_x=standard_deviation(x)
+    stdev_y = standard_deviation(y)
+    if stdev_x>0 and stdev_y > 0 :
+        return covariance(x,y)/stdev_x/stdev_y
+    else:
+        return 0
+
+print(correlation(num_friends,daily_minutes))
